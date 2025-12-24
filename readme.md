@@ -6,6 +6,13 @@ if you havent' played before, the asylum demon doesn't require the same complex 
 
 This model is not intended to be scalable to any other enemy character in the game. There's Cheat Engine integration to reset to the steps in front of the asylum demon only.
 
+
+Im using cheatengine to freeze / reset the game but im using purely CV for deriving things like stamina and hp (just crop cv image and count images that aren't the empty bar colour, trivial).
+
+
+.... I do need to figure out how RL is gonna fit into this... I mean we can't throw a half million attempts at this.
+
+
 See below for status of this project
 
 
