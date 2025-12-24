@@ -1,0 +1,11 @@
+{
+  "asylum_boss": {
+    "name": "Asylum Demon",
+    "x": 3.177822351,
+    "y": 198.1394043,
+    "z": -7.33400774,
+
+    "description": "Boss fog gate",
+    "b" : "71 61 4B 40 B0 23 46 43 31 B0 EA C0"
+  }
+}
