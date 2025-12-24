@@ -94,6 +94,10 @@ For sending commands we just write to the file as below:
 ### 3. Running the Program
 You have two options:
 
+! important note ! important note
+
+It's worth your time to make a firewall rule to keep dark souls remastered from seeing the internet. dont wanna get banned and the web login will ruin your day 
+
 1. **Debug Mode**: Run `./DEBUGWINDOW.py`  
    - Launches a Tkinter window for debugging image capture and bar extraction.
 
