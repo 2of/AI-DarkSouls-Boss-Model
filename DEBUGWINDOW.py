@@ -4,14 +4,14 @@ from datetime import datetime
 import vgamepad as vg
 import json
 from pathlib import Path
-
+from CV import *
 from CE import DarkSoulsCheatWrapper
-
+from Controller import * 
 
 class ThingUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Dark Souls AI Trainer")
+        self.root.title("DS AI Trainer")
         self.root.geometry("600x680")
         self.root.resizable(False, False)
 
@@ -19,7 +19,7 @@ class ThingUI:
 
         self.positions_file = Path("positions.json")
         self.positions = self.load_positions()
-
+        self.controller = Controller() 
         try:
             self.GameWrapper = DarkSoulsCheatWrapper()
         except Exception as e:
@@ -60,6 +60,25 @@ class ThingUI:
 
         self.GameWrapper.teleport(x, y, z)
 
+
+
+    def processFrame(self):
+        img = get_screencap()
+        cropped_img, health_bar, stamina_bar, boss_hp_bar = img_ingest(img)
+        stamina_pct = get_fill_from_img(stamina_bar)
+        health_pct = get_fill_from_img(health_bar)
+        print(f" Stamina: {stamina_pct}% | HP: {health_pct} * 10 %")
+
+    def showHealthStaminaSrc(self):
+        img = get_screencap()
+        cropped_img, health_bar, stamina_bar, boss_hp_bar = img_ingest(img)
+        show_augmented_view(cropped_img)
+
+    def RandomMoveToggleOn():
+        pass
+
+    def start_randow_inputs_XINPUT(self):
+        pass
 
     def save_positions(self, positions=None):
         if positions is None:
@@ -134,6 +153,32 @@ class ThingUI:
         ttk.Button(mem_frame, text="Freeze Game", command=self.freeze_game).grid(row=1, column=0, pady=5)
         ttk.Button(mem_frame, text="Resume Game", command=self.resume_game).grid(row=1, column=1, pady=5)
         ttk.Button(mem_frame, text="MISC", command=self.MISC_BUTTON_DO).grid(row=1, column=3, pady=5)
+
+
+
+
+        CV_frame = ttk.LabelFrame(self.root, text="CV ")
+        CV_frame.pack(fill="x", padx=10, pady=10)
+
+     
+        ttk.Button(CV_frame, text="Capture and process screen cap", command=self.processFrame).grid(row=1, column=0, pady=5)
+ 
+        ttk.Button(CV_frame, text="display src aug", command=self.showHealthStaminaSrc).grid(row=2, column=0, pady=5)
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         teleport_frame = ttk.LabelFrame(self.root, text="Teleport")
         teleport_frame.pack(fill="x", padx=10, pady=10)
 
@@ -185,18 +230,22 @@ class ThingUI:
 
         teleport_frame.columnconfigure(1, weight=1)
 
-        controller = ttk.LabelFrame(self.root, text="Virtual Controller")
+        controller = ttk.LabelFrame(self.root, text="Controller Actions")
         controller.pack(padx=10, pady=10)
+        self.make_button_CONTROLLER(controller, "Attack", self.controller.attack, 0, 1)
+        # self.make_button_CONTROLLER(controller, "Roll", self.controller.roll, 0, 2)
+        self.make_button_CONTROLLER(controller, "Guard", self.controller.guard, 0, 3)
 
-        self.make_button(controller, "A", vg.XUSB_BUTTON.XUSB_GAMEPAD_A, 0, 1)
-        self.make_button(controller, "B", vg.XUSB_BUTTON.XUSB_GAMEPAD_B, 0, 2)
-        self.make_button(controller, "X", vg.XUSB_BUTTON.XUSB_GAMEPAD_X, 1, 1)
-        self.make_button(controller, "Y", vg.XUSB_BUTTON.XUSB_GAMEPAD_Y, 1, 2)
+        self.make_button_CONTROLLER(controller, "Forward", self.controller.forward, 1, 1)
+        self.make_button_CONTROLLER(controller, "Back", self.controller.back, 2, 1)
+        self.make_button_CONTROLLER(controller, "Left", self.controller.strafe_left, 1, 0)
+        self.make_button_CONTROLLER(controller, "Right", self.controller.strafe_right, 1, 2)
 
-        self.make_button(controller, "↑", vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP, 0, 4)
-        self.make_button(controller, "↓", vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN, 2, 4)
-        self.make_button(controller, "←", vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT, 1, 3)
-        self.make_button(controller, "→", vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_RIGHT, 1, 5)
+        # Random controls (own row)
+        self.make_button_CONTROLLER(controller, "Random Once", self.controller.performRandom, 3, 0)
+        self.make_button_CONTROLLER(controller, "Start Random", self.controller.loopRandom, 3, 1)
+        self.make_button_CONTROLLER(controller, "Stop Random", self.controller.killrandomLoop, 3, 2)
+
 
         log_frame = ttk.LabelFrame(self.root, text="Log")
         log_frame.pack(fill="both", expand=True, padx=10, pady=10)
@@ -204,11 +253,10 @@ class ThingUI:
         self.log_text = tk.Text(log_frame, height=8, state="disabled")
         self.log_text.pack(fill="both", expand=True)
 
-    def make_button(self, parent, text, button, r, c):
-        btn = ttk.Button(parent, text=text, width=4)
+    def make_button_CONTROLLER(self, parent, text, action, r, c):
+        btn = ttk.Button(parent, text=text, width=8, command=action)
         btn.grid(row=r, column=c, padx=5, pady=5)
-        btn.bind("<ButtonPress-1>", lambda e: self.press(button))
-        btn.bind("<ButtonRelease-1>", lambda e: self.release(button))
+
 
     def press(self, button):
         self.gamepad.press_button(button)
