@@ -19,7 +19,7 @@ WINDOW_CROP = {
 }
 
 HEALTH_BAR_BOX = (44, 45, 95, 271)      # y1, y2, x1, x2
-STAMINA_BAR_BOX = (56, 61, 96, 204)
+STAMINA_BAR_BOX = (56, 66, 96, 204)
 BOSS_HP_BAR_BOX = (50, 70, 600, 1200)
 
 
@@ -160,13 +160,19 @@ if __name__ == "__main__":
     cropped = clip_window_bar_and_crop(img)
     cropped = soften(cropped)
 
-    health_bar = get_fill_from_img(cropped)
+    # Extract bar areas
+    health_bar = get_health_bar_area(cropped)
     stamina_bar = get_stamina_bar_area(cropped)
     boss_hp_bar = get_boss_hp_area(cropped)
 
-    # Debug / analysis
-    stamina_pct = img_get_stamina(stamina_bar)
-    print("Stamina %:", stamina_pct)
+    # Debug / analysis - get fill percentages
+    health_pct = get_fill_from_img(health_bar)
+    stamina_pct = get_fill_from_img(stamina_bar)
+    boss_hp_pct = get_fill_from_img(boss_hp_bar)
+    
+    print(f"Health %: {health_pct}")
+    print(f"Stamina %: {stamina_pct}")
+    print(f"Boss HP %: {boss_hp_pct}")
 
     # Visual validation
     show_augmented_view(cropped)
