@@ -16,7 +16,20 @@ Im using cheatengine to freeze / reset the game but im using purely CV for deriv
 See below for status of this project
 
 
+
+## Sample Video below
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=IcVWbBm_rkM">
+    <img src="https://img.youtube.com/vi/IcVWbBm_rkM/0.jpg" alt="Watch the video"/>
+  </a>
+</p>
+
+
+
+
 **Status:** WIP – Currently just boilerplate and support libraries, Must be run on win, CE 7.6 & latest dark souls remastered
+
 
 TODO:
 
